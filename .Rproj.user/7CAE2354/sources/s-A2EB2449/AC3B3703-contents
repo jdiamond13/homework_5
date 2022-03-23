@@ -1,0 +1,82 @@
+---
+title: "Untitled"
+output: github_document
+---
+
+```{r}
+library("devtools")
+library(roxygen2)
+library(tidyverse)
+library("corrplot")
+```
+	
+```{r}
+d <- read_csv("/Users/jadiamon/Documents/Columbia/Spring\ 2022/Modern\ Data\ Structures/Homeworks/gr5072-homework-5-jdiamond13/data/raw/Seasons_Stats_NBA.csv")
+
+```
+	
+	#1. `[30 pts]` Create three functions and save them into individual R scripts (.R files).  
+
+	**Function 1:** Your input for this function should be an individual year.  Your output should be a data point of interest in the dataset for some player.
+
+	**Function 2:** Your input for this function should be an individual year.  Your output should be the oldest player in the NBA data for that year (if multiple players have the same age, then decide how to return a single player).
+
+	**Function 3:** Your input for this function should be an individual year.  Your function should limit the data for that year to include numeric continuous variables only (not categorical data).  Your output should be the correlation matrix for all numeric variables in the data for that year.  (Hint: use `cor(data)` to create correlation matrix.  If you feel adventuresome, then you can return a correlogram plot from [here](http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram) instead).
+
+```{r function 1}
+mjs_pts <- function(yr){
+  
+  filtered_by_yr_mj <- filter(d, Year == yr, Player == "Michael Jordan*", na.rm=TRUE)
+
+  if (nrow(filter(d, Year == yr, Player == "Michael Jordan*")) == 0) {
+    return(NA)
+  } else {
+    return(sum(filtered_by_yr_mj$PTS))
+  }
+}
+
+mjs_pts(1990)
+```
+
+```{r function 2}
+years_oldest <- function(yr) {
+  filtered_by_yr <- filter(d, Year == yr, na.rm=TRUE)   # filter the dataframe to select only the rows where Year = yr
+  max_age <- max(filtered_by_yr$Age, na.rm=TRUE)   # from the filtered data, find the max age
+  filtered_by_age <- filter(filtered_by_yr, Age==max_age, na.rm=TRUE)   # filter the filtered dataframe to select only the rows where Age = max_age
+  filtered_by_player <- arrange(filtered_by_age, desc(Player))   # sort by name alphabetically
+  name <- filtered_by_player$Player   # select the first name alphabetically
+  return(name[[1]])   # return name
+}
+
+years_oldest(1960)
+```
+	
+
+```{r warning = FALSE}
+corr_matrix <- function(yr) { #test with plot
+  filtered_by_yr <- filter(d, Year == yr, na.rm=TRUE) 
+  numeric_only <- keep(filtered_by_yr,is_numeric)
+  corr_ouput <- round(cor(numeric_only),2)
+  corrplot(corr_ouput, method="shade")
+}
+
+corr_matrix(2012)
+```
+
+
+```{r warning = FALSE}
+corr_matrix <- function(yr) {
+  filtered_by_yr <- filter(d, Year == yr, na.rm=TRUE) 
+  numeric_only <- keep(filtered_by_yr,is_numeric)
+  corr_ouput <- cor(numeric_only)
+  return(corr_ouput)
+}
+
+corr_matrix(2012)
+```
+	
+```{r}
+create_package("nba2stats")
+```
+	
+	

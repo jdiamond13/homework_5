@@ -1,0 +1,11 @@
+Package: nbastats
+Type: Package
+Title: This Package Provides Descriptive Statistics Of Nba Data
+Version: 0.1.0
+Author: James Diamond
+Maintainer: James Diamond <jmd2301@columbia.edu>
+Description: This package contains 3 functions:One that will provide the number of points Michael Jordan scored in a given year. One that outputs the oldest player in a given year. One that outputs a correlation matrix for all numeric variables in the data for a given year.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2 

@@ -1,0 +1,8 @@
+"0","corr_matrix <- function(yr) { #test with plot"
+"0","  filtered_by_yr <- filter(d, Year == yr, na.rm=TRUE) "
+"0","  numeric_only <- keep(filtered_by_yr,is_numeric)"
+"0","  corr_ouput <- round(cor(numeric_only),2)"
+"0","  corrplot(corr_ouput, method=""shade"")"
+"0","}"
+"0",""
+"0","corr_matrix(2012)"
